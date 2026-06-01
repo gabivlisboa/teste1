@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OrbitGuard — Plataforma</title>
+  <link rel="stylesheet" href="css/plataforma.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <a href="index.html" class="logo">Orbit<span>Guard</span></a>
+    <nav>
+      <a href="index.html">Início</a>
+      <a href="plataforma.html" class="btn-header">Acessar Plataforma</a>
+    </nav>
+  </header>
+
+  <!-- TELA 1: ONBOARDING -->
+  <main id="tela-onboarding" class="tela active">
+    <div class="onboard-wrap">
+      <h1>Monitoramento ambiental para você</h1>
+      <p class="onboard-sub">Escolha o seu perfil e o estado para ver os detalhes</p>
+
+      <div class="perfis-grid">
+
+        <div class="perfil-card" data-perfil="agricultor">
+          <div class="perfil-icon">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+              <circle cx="24" cy="24" r="24" fill="#E1F5EE"/>
+              <text x="24" y="30" text-anchor="middle" font-size="22">🌾</text>
+            </svg>
+          </div>
+          <strong>Agricultores</strong>
+        </div>
+
+        <div class="perfil-card" data-perfil="defesa">
+          <div class="perfil-icon">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+              <circle cx="24" cy="24" r="24" fill="#E6F1FB"/>
+              <text x="24" y="30" text-anchor="middle" font-size="22">🛡️</text>
+            </svg>
+          </div>
+          <strong>Defesa Civil</strong>
+        </div>
+
+        <div class="perfil-card" data-perfil="comunidade">
+          <div class="perfil-icon">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+              <circle cx="24" cy="24" r="24" fill="#FAEEDA"/>
+              <text x="24" y="30" text-anchor="middle" font-size="22">🏘️</text>
+            </svg>
+          </div>
+          <strong>Comunidades</strong>
+        </div>
+
+      </div>
+
+      <div class="estado-row">
+        <div class="estado-wrap">
+          <label for="select-estado">Escolha o seu estado</label>
+          <div class="select-box">
+            <select id="select-estado">
+              <option value="">-- Selecione --</option>
+              <option value="Acre">Acre</option>
+              <option value="Alagoas">Alagoas</option>
+              <option value="Amapá">Amapá</option>
+              <option value="Amazonas">Amazonas</option>
+              <option value="Bahia">Bahia</option>
+              <option value="Ceará">Ceará</option>
+              <option value="Distrito Federal">Distrito Federal</option>
+              <option value="Espírito Santo">Espírito Santo</option>
+              <option value="Goiás">Goiás</option>
+              <option value="Maranhão">Maranhão</option>
+              <option value="Mato Grosso">Mato Grosso</option>
+              <option value="Mato Grosso do Sul">Mato Grosso do Sul</option>
+              <option value="Minas Gerais">Minas Gerais</option>
+              <option value="Pará">Pará</option>
+              <option value="Paraíba">Paraíba</option>
+              <option value="Paraná">Paraná</option>
+              <option value="Pernambuco">Pernambuco</option>
+              <option value="Piauí">Piauí</option>
+              <option value="Rio de Janeiro">Rio de Janeiro</option>
+              <option value="Rio Grande do Norte">Rio Grande do Norte</option>
+              <option value="Rio Grande do Sul">Rio Grande do Sul</option>
+              <option value="Rondônia">Rondônia</option>
+              <option value="Roraima">Roraima</option>
+              <option value="Santa Catarina">Santa Catarina</option>
+              <option value="São Paulo">São Paulo</option>
+              <option value="Sergipe">Sergipe</option>
+              <option value="Tocantins">Tocantins</option>
+            </select>
+            <span class="select-arrow">&#8964;</span>
+          </div>
+        </div>
+
+        <button id="btn-ver-alertas" class="btn-primario" onclick="verAlertas()">
+          Ver alertas
+        </button>
+      </div>
+
+      <p id="erro-msg" class="erro-msg" style="display:none;">
+        Por favor, selecione um perfil e um estado.
+      </p>
+    </div>
+  </main>
+
+  <!-- TELA 2: DASHBOARD -->
+  <main id="tela-dashboard" class="tela">
+    <div class="dashboard-wrap">
+
+      <button class="btn-voltar" onclick="voltar()">← Trocar perfil</button>
+
+      <!-- CARD PRINCIPAL -->
+      <div class="dash-card" id="dash-card">
+
+        <div class="dash-card-header">
+          <div class="dash-perfil-info">
+            <div class="dash-perfil-icon" id="dash-icon">🌾</div>
+            <div>
+              <strong id="dash-perfil-nome">Agricultor</strong>
+              <span id="dash-perfil-sub">Planeja e protege sua produção</span>
+            </div>
+          </div>
+          <div class="dash-estado-label">
+            Estado: <strong id="dash-estado-nome">São Paulo</strong>
+          </div>
+        </div>
+
+        <!-- LOADING -->
+        <div id="loading-clima" class="loading-wrap">
+          <div class="spinner"></div>
+          <p>Buscando dados via satélite NASA...</p>
+        </div>
+
+        <!-- CONTEUDO DO DASHBOARD (aparece após carregar) -->
+        <div id="dash-conteudo" style="display:none;">
+
+          <div class="situacao-row">
+            <span class="situacao-label">Situação:</span>
+            <span id="badge-situacao" class="badge-situacao badge-medio">
+              ⛅ Carregando...
+            </span>
+          </div>
+
+          <div class="chips-clima">
+            <div class="chip">
+              <span class="chip-icon">🌡️</span>
+              <span id="chip-temp">--°C</span>
+            </div>
+            <div class="chip">
+              <span class="chip-icon">💧</span>
+              <span id="chip-umid">-- umid.</span>
+            </div>
+            <div class="chip">
+              <span class="chip-icon">🌧️</span>
+              <span id="chip-chuva">-- mm/dia</span>
+            </div>
+          </div>
+
+          <div class="secao-label">RECOMENDAÇÕES</div>
+          <div class="recos-box" id="recos-box">
+            <!-- Preenchido via JS -->
+          </div>
+
+          <div class="secao-label">MEDIDAS A TOMAR</div>
+          <div class="medidas-grid" id="medidas-grid">
+            <!-- Preenchido via JS -->
+          </div>
+
+          <!-- Fonte dos dados -->
+          <div class="fonte-dados">
+            <span>📡 Dados: NASA EONET + Open-Meteo · Atualizado agora</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <strong>Desenvolvedores</strong>
+        <p>Gabriella Viana Lisbôa</p>
+        <p>Isadora Basso Asseiro</p>
+      </div>
+      <div class="footer-col footer-brand">
+        <span class="logo">Orbit<span>Guard</span></span>
+        <p>O OrbitGuard transforma tecnologia em prevenção para um futuro mais seguro e sustentável</p>
+      </div>
+      <div class="footer-col">
+        <strong>Contato</strong>
+        <p>📧 contato@orbitguard.com.br</p>
+        <p>📞 (11) 99999-9999</p>
+        <p>📍 Av Paulista 1106 – São Paulo</p>
+      </div>
+      <div class="footer-col">
+        <strong>Navegação</strong>
+        <a href="index.html#problema">Problema</a>
+        <a href="index.html#tecnologia">Tecnologia</a>
+        <a href="index.html#objetivos">Objetivos</a>
+        <a href="index.html#publico">Público-alvo</a>
+        <a href="index.html#beneficios">Benefícios</a>
+        <a href="index.html#aplicacao">Aplicação</a>
+      </div>
+    </div>
+    <div class="footer-bottom">©2026 · Todos os direitos reservados.</div>
+  </footer>
+
+  <script src="js/plataforma.js"></script>
+</body>
+</html>
